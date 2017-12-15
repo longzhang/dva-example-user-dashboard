@@ -11,6 +11,12 @@ export default {
     save(state, { payload: { data: list, total, page } }) {
       return { ...state, list, total, page };
     },
+    page_reload_2(state,{ payload: { data: list, total } }){
+      console.log("dddddddd")
+      console.log(total)
+      const zhanglong = total
+      return {...state,zhanglong}
+    }
   },
   effects: {
     *fetch({ payload: { page = 1 } }, { call, put }) {
@@ -40,6 +46,16 @@ export default {
       const page = yield select(state => state.users.page);
       yield put({ type: 'fetch', payload: { page } });
     },
+    *page_reload(aciton, {call, put}){
+      const { data, headers } = yield call(usersService.fetch_zhanglong,);
+      yield put({
+        type: "page_reload_2",
+        payload: {
+          data,
+          total: parseInt(headers['x-total-count'], 10),
+        },
+      });
+    }
   },
   subscriptions: {
     setup({ dispatch, history }) {

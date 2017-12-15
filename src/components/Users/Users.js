@@ -6,7 +6,7 @@ import styles from './Users.css';
 import { PAGE_SIZE } from '../../constants';
 import UserModal from './UserModal';
 
-function Users({ dispatch, list: dataSource, loading, total, page: current }) {
+function Users({ dispatch, list: dataSource, loading, total, page: current, zhanglong: zhanglong }) {
   function deleteHandler(id) {
     dispatch({
       type: 'users/remove',
@@ -33,6 +33,13 @@ function Users({ dispatch, list: dataSource, loading, total, page: current }) {
       type: 'users/create',
       payload: values,
     });
+  }
+
+  function page_reload() {
+    dispatch({
+      type: 'users/page_reload',
+    });
+
   }
 
   const columns = [
@@ -69,6 +76,8 @@ function Users({ dispatch, list: dataSource, loading, total, page: current }) {
   ];
 
   return (
+
+
     <div className={styles.normal}>
       <div>
         <div className={styles.create}>
@@ -76,6 +85,10 @@ function Users({ dispatch, list: dataSource, loading, total, page: current }) {
             <Button type="primary">Create User</Button>
           </UserModal>
         </div>
+          <div>
+            <Button type="primary" onClick={page_reload} >重新载入数据</Button>
+          </div>
+        <div>{zhanglong}</div>
         <Table
           columns={columns}
           dataSource={dataSource}
@@ -96,12 +109,13 @@ function Users({ dispatch, list: dataSource, loading, total, page: current }) {
 }
 
 function mapStateToProps(state) {
-  const { list, total, page } = state.users;
+  const { list, total , page , zhanglong} = state.users;
   return {
     loading: state.loading.models.users,
     list,
     total,
     page,
+    zhanglong
   };
 }
 
